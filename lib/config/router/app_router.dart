@@ -5,14 +5,17 @@ final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
-      name: HomeScreen.name,
-      path: '/home',
-      builder: (context, state) => const HomeScreen(),
-    ),
+        name: HomeScreen.name,
+        path: '/home',
+        builder: (context, state) => const HomeScreen()),
     GoRoute(
         name: LoginScreen.name,
         path: '/login',
         builder: (context, state) => const LoginScreen()),
+    GoRoute(
+        name: RegisterScreen.name,
+        path: '/register',
+        builder: (context, state) => const RegisterScreen()),
     GoRoute(
         name: SplashScreenAnimated.name,
         path: '/',

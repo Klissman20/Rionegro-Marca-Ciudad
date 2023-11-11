@@ -119,7 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.pushNamed(RegisterScreen.name);
+                      },
                       child: const Text(
                         '¿No tiene una cuenta? - Registrese',
                         maxLines: 1,
