@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static Color colorApp = const Color(0xE7FF004C);
+  static Color colorApp = const Color(0xFFE7004C);
 
-  static Color darkColorApp = const Color.fromARGB(255, 132, 1, 44);
+  static Color darkColorApp = Color.fromARGB(255, 151, 0, 50);
 
   ThemeData getTheme() => ThemeData(
         useMaterial3: true,
