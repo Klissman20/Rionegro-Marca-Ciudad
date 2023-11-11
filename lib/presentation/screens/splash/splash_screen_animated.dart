@@ -13,7 +13,7 @@ class SplashScreenAnimated extends StatelessWidget {
         splash: Image.asset('assets/logo.png'),
         nextScreen: const LoginScreen(),
         splashTransition: SplashTransition.scaleTransition,
-        animationDuration: const Duration(milliseconds: 500),
+        animationDuration: const Duration(milliseconds: 400),
         nextRoute: LoginScreen.name,
         backgroundColor: AppTheme.colorApp,
         splashIconSize: 300.0);

@@ -22,7 +22,7 @@ flutter:
   uses-material-design: true
   assets:
     - .env
-    - assets/logo.png
+    - assets/
 
   fonts:
     - family: Gotham
