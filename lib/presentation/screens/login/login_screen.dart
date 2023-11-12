@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/login/password_field_box.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/login/text_field_box.dart';
@@ -56,97 +57,112 @@ class _LoginScreenState extends State<LoginScreen> {
             : null;
 
     return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/background.png'),
-                  fit: BoxFit.cover)),
-        ),
-        SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 100,
-                ),
-                Image.asset(
-                  'assets/logo.png',
-                  height: 200,
-                ),
-                const SizedBox(
-                  height: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: CustomTextField(
-                      controller: controllerUser,
-                      labelText: 'Usuario',
-                      onChanged: () {},
-                      prefixIcon: Icons.person_outlined,
-                      typeText: TextInputType.emailAddress),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: PasswordFieldBox(
-                    controller: controllerPassword,
-                    onChanged: (value) {
-                      setState(() {
-                        inputPassword = controllerPassword.text;
-                      });
-                    },
-                    errorText: '',
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: _LogInButton(
-                    text: 'Ingresar',
-                    user: inputUser.trim(),
-                    password: inputPassword,
-                    valid: errorTextPassword(controllerPassword.value.text) !=
-                            null ||
-                        errorTextEmail(controllerUser.value.text) != null,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: TextButton(
-                      onPressed: () {
-                        context.pushNamed(RegisterScreen.name);
-                      },
-                      child: const Text(
-                        '¿No tiene una cuenta? - Registrese',
-                        maxLines: 1,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 17),
-                      )),
-                ),
-                const Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _GoogleButton(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _AppleButton(),
-                  ],
-                ),
-              ],
-            ),
+      backgroundColor: AppTheme.colorApp,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/background.png'),
+                    fit: BoxFit.cover)),
           ),
-        )
+          SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 200,
+                  ),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: CustomTextField(
+                        controller: controllerUser,
+                        labelText: 'Usuario',
+                        onChanged: () {},
+                        prefixIcon: Icons.person_outlined,
+                        typeText: TextInputType.emailAddress),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: PasswordFieldBox(
+                      controller: controllerPassword,
+                      onChanged: (value) {
+                        setState(() {
+                          inputPassword = controllerPassword.text;
+                        });
+                      },
+                      errorText: '',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: _LogInButton(
+                      text: 'Ingresar',
+                      user: inputUser.trim(),
+                      password: inputPassword,
+                      valid: errorTextPassword(controllerPassword.value.text) !=
+                              null ||
+                          errorTextEmail(controllerUser.value.text) != null,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: TextButton(
+                        onPressed: () {
+                          context.pushNamed(RegisterScreen.name);
+                        },
+                        child: const Text(
+                          '¿No tiene una cuenta? - Registrese',
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 17),
+                        )),
+                  ),
+                  const Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _GoogleButton(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _AppleButton(),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+      persistentFooterButtons: [
+        TextButton(
+            onPressed: () {},
+            child: const Text(
+              "Copyright © Subsecreataría de Desarrollo Económico 2023",
+              maxLines: 1,
+              style: TextStyle(fontSize: 12, color: Colors.white),
+            ))
       ],
-    ));
+      persistentFooterAlignment: AlignmentDirectional.bottomCenter,
+    );
   }
 }
 

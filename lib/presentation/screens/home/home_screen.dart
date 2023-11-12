@@ -17,31 +17,34 @@ class HomeScreen extends StatelessWidget {
         'Rionegro te ofrece la oportunidad de explorar su rica historia, disfrutar de su belleza natural, degustar la gastronomía local y conectarte con el mundo.';
 
     return Scaffold(
-        backgroundColor: AppTheme.colorApp,
-        appBar: AppBar(
-          backgroundColor: AppTheme.colorApp,
-          toolbarHeight: 40.0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.goNamed(LoginScreen.name);
-              },
-              icon: const Icon(Icons.exit_to_app),
-              color: Colors.white,
-            )
-          ],
+      extendBodyBehindAppBar: true,
+      backgroundColor: AppTheme.colorApp,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 40.0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.goNamed(LoginScreen.name);
+            },
+            icon: const Icon(Icons.exit_to_app),
+            color: Colors.white,
+          )
+        ],
+      ),
+      body: Stack(children: [
+        Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/background.png'),
+                  fit: BoxFit.cover)),
         ),
-        body: SafeArea(
-            child: Stack(children: [
-          Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/background.png'),
-                    fit: BoxFit.cover)),
-          ),
-          SingleChildScrollView(
-              child: Center(
-                  child: Column(children: [
+        SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.only(top: 70),
+          child: Center(
+              child: Column(children: [
             const SizedBox(
               height: 30,
             ),
@@ -109,8 +112,10 @@ class HomeScreen extends StatelessWidget {
               color: const Color(0xFFBB77C9),
               onPressed: () {},
             ),
-          ]))),
-        ])));
+          ])),
+        )),
+      ]),
+    );
   }
 }
 
