@@ -85,32 +85,53 @@ class HomeScreen extends StatelessWidget {
             ),
             _CustomButton(
               text: 'Ruta del Sabor',
-              color: const Color(0xFF00B2E3),
-              onPressed: () {},
+              color: AppTheme.colorApp1,
+              onPressed: () {
+                context.goNamed(MapScreen.name);
+              },
             ),
             const SizedBox(
               height: 20,
             ),
             _CustomButton(
               text: 'Ruta de la Historia',
-              color: const Color(0xFFF5B335),
-              onPressed: () {},
+              color: AppTheme.colorApp2,
+              onPressed: () {
+                context.goNamed(MapScreen.name);
+              },
             ),
             const SizedBox(
               height: 20,
             ),
             _CustomButton(
               text: 'Ruta de la Sostenibilidad',
-              color: const Color(0xFF45C2B1),
-              onPressed: () {},
+              color: AppTheme.colorApp3,
+              onPressed: () {
+                context.goNamed(MapScreen.name);
+              },
             ),
             const SizedBox(
               height: 20,
             ),
             _CustomButton(
               text: 'Ruta de las Flores',
-              color: const Color(0xFFBB77C9),
-              onPressed: () {},
+              color: AppTheme.colorApp4,
+              onPressed: () {
+                context.goNamed(MapScreen.name);
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            _CustomButton(
+              text: 'Festividades y eventos',
+              color: AppTheme.colorApp5,
+              onPressed: () {
+                context.goNamed(MapScreen.name);
+              },
+            ),
+            const SizedBox(
+              height: 40,
             ),
           ])),
         )),
