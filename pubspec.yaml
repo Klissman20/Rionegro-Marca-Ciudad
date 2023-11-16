@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.1.0
+  flutter_polyline_points: ^2.0.0
+  flutter_riverpod: ^2.4.6
+  geolocator: ^10.1.0
   go_router: ^12.1.1
   google_maps_flutter: ^2.5.0
   supabase_flutter: ^1.10.25
@@ -25,6 +28,7 @@ flutter:
   assets:
     - .env
     - assets/
+    - assets/rutas/
 
   fonts:
     - family: Gotham
