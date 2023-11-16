@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Needed to access location when the app is open in order to use Google Maps and AR</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Needed to access location always in order to use Google Maps</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Needed to access location when the app is open in order to use Google Mapsand AR</string>
 </dict>
 </plist>
