@@ -87,7 +87,7 @@ class HomeScreen extends StatelessWidget {
               text: 'Ruta del Sabor',
               color: AppTheme.colorApp1,
               onPressed: () {
-                context.goNamed(MapScreen.name);
+                context.goNamed(MapScreen.name, extra: 1);
               },
             ),
             const SizedBox(
@@ -97,7 +97,7 @@ class HomeScreen extends StatelessWidget {
               text: 'Ruta de la Historia',
               color: AppTheme.colorApp2,
               onPressed: () {
-                context.goNamed(MapScreen.name);
+                context.goNamed(MapScreen.name, extra: 2);
               },
             ),
             const SizedBox(
@@ -107,7 +107,7 @@ class HomeScreen extends StatelessWidget {
               text: 'Ruta de la Sostenibilidad',
               color: AppTheme.colorApp3,
               onPressed: () {
-                context.goNamed(MapScreen.name);
+                context.goNamed(MapScreen.name, extra: 3);
               },
             ),
             const SizedBox(
@@ -117,7 +117,7 @@ class HomeScreen extends StatelessWidget {
               text: 'Ruta de las Flores',
               color: AppTheme.colorApp4,
               onPressed: () {
-                context.goNamed(MapScreen.name);
+                context.goNamed(MapScreen.name, extra: 4);
               },
             ),
             const SizedBox(

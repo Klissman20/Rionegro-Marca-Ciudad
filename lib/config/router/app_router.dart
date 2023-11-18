@@ -7,7 +7,10 @@ final appRouter = GoRouter(
     GoRoute(
         name: MapScreen.name,
         path: '/map',
-        builder: (context, state) => const MapScreen()),
+        builder: (context, state) {
+          int category = state.extra as int;
+          return MapScreen(category: category);
+        }),
     GoRoute(
         name: HomeScreen.name,
         path: '/home',

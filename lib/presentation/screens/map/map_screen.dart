@@ -13,10 +13,12 @@ import 'package:rionegro_marca_ciudad/presentation/providers/google_map_provider
 import 'package:rionegro_marca_ciudad/presentation/providers/initial_loading_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/full_screen_loader.dart';
+import 'package:rionegro_marca_ciudad/presentation/widgets/map/dialog_details.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   static const String name = 'map-screen';
-  const MapScreen({super.key});
+  final int category;
+  const MapScreen({required this.category, super.key});
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -42,19 +44,61 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   final isAndroid = Platform.isAndroid;
 
+  late Routes selectedRoute;
+
   @override
   void initState() {
     setCustomMapPin();
     initialMapCenter = ref.read(initialCenterProvider);
     ref.read(userCurrentLocationProvider.notifier).getUserCurrentLocation();
     ref.read(markersListProvider.notifier).getMarkers();
+    switch (widget.category) {
+      case 1:
+        selectedRoute =
+            Routes(color: AppTheme.colorApp1, title: 'Ruta del Sabor');
+        break;
+      case 2:
+        selectedRoute =
+            Routes(color: AppTheme.colorApp2, title: 'Ruta de la Historia');
+        break;
+      case 3:
+        selectedRoute = Routes(
+            color: AppTheme.colorApp3, title: 'Ruta de la Sostenibilidad');
+        break;
+      case 4:
+        selectedRoute =
+            Routes(color: AppTheme.colorApp4, title: 'Ruta de las Flores');
+        break;
+      case 5:
+        selectedRoute =
+            Routes(color: AppTheme.colorApp5, title: 'Festividades y eventos');
+        break;
+      default:
+    }
     super.initState();
   }
 
   void setCustomMapPin() async {
-    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(size: Size(5, 5)),
-        'assets/rutas/logo_historia.png');
+    if (isAndroid) {
+      switch (widget.category) {
+        case 1:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_sabor_android.png');
+
+          break;
+        case 2:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_historia_android.png');
+          break;
+        default:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_sabor_android.png');
+      }
+    }
+    setState(() {});
   }
 
 // Create Map with markers
@@ -81,9 +125,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           position: marker.position,
           infoWindow: InfoWindow(
             title: marker.name,
-            onTap: () {},
+            onTap: () {
+              showCustomDialog(context, marker);
+            },
           ),
-          onTap: () async {},
+          onTap: () {
+            showCustomDialog(context, marker);
+          },
           icon: pinLocationIcon));
     }
     await ref
@@ -111,6 +159,37 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     CameraUpdate cameraUpdate = CameraUpdate.newLatLngBounds(bounds, 50);
     Timer(const Duration(milliseconds: 800),
         () => mapController.animateCamera(cameraUpdate));
+  }
+
+  void showCustomDialog(BuildContext context, MarkerEntity marker) {
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Barrier",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.8),
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, __, ___) {
+        return Material(
+            color: Colors.transparent,
+            child: Center(child: DialogDetails(marker: marker)));
+      },
+      transitionBuilder: (_, anim, __, child) {
+        Tween<Offset> tween;
+        if (anim.status == AnimationStatus.reverse) {
+          tween = Tween(begin: const Offset(-1, 0), end: Offset.zero);
+        } else {
+          tween = Tween(begin: const Offset(1, 0), end: Offset.zero);
+        }
+
+        return SlideTransition(
+          position: tween.animate(anim),
+          child: FadeTransition(
+            opacity: anim,
+            child: child,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -141,9 +220,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         GoogleMap(
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
-          padding: isAndroid
-              ? const EdgeInsets.only(bottom: 160, top: 150)
-              : const EdgeInsets.only(bottom: 150, top: 100),
+          padding: const EdgeInsets.only(bottom: 160, top: 90),
           onMapCreated: onMapCreated,
           markers: _markers,
           mapToolbarEnabled: false,
@@ -156,11 +233,21 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             height: 80,
             width: double.infinity,
             decoration: BoxDecoration(color: AppTheme.colorApp),
-            child: IconButton(
-                onPressed: () {
-                  context.goNamed(LoginScreen.name);
-                },
-                icon: const Icon(Icons.exit_to_app, color: Colors.white)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      context.pushReplacementNamed(HomeScreen.name);
+                    },
+                    icon: const Icon(Icons.home, color: Colors.white)),
+                IconButton(
+                    onPressed: () {
+                      context.goNamed(LoginScreen.name);
+                    },
+                    icon: const Icon(Icons.exit_to_app, color: Colors.white))
+              ],
+            ),
           ),
         ),
         Positioned(
@@ -170,27 +257,27 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       ]),
       bottomSheet: Container(
         width: double.infinity,
-        decoration: BoxDecoration(color: AppTheme.colorApp2),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        decoration: BoxDecoration(color: selectedRoute.color),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Ruta de la historia",
+                selectedRoute.title,
                 textAlign: TextAlign.center,
                 maxLines: 2,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              Divider(
+              const Divider(
                 thickness: 2,
                 color: Colors.white,
               ),
-              Text(
+              const Text(
                 "Estas cuatro rutas te permitirán experimentar la diversidad de esta ciudad que conserva las tradiciones antioqueñas y mira hacia el futuro.",
                 textAlign: TextAlign.center,
                 maxLines: 5,
@@ -201,11 +288,18 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   height: 1.0,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class Routes {
+  final String title;
+  final Color color;
+
+  Routes({required this.title, required this.color});
 }
