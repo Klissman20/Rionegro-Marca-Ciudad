@@ -97,6 +97,21 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               const ImageConfiguration(size: Size(5, 5)),
               'assets/rutas/logo_sabor_android.png');
       }
+    } else {
+      switch (widget.category) {
+        case 1:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_sabor_ios.png');
+        case 2:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_historia_ios.png');
+        default:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_sabor_ios.png');
+      }
     }
     setState(() {});
   }
