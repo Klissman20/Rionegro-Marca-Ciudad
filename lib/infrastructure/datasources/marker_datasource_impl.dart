@@ -11,7 +11,7 @@ class MarkerDatasourceImpl extends MarkerDatasource {
   Future<List<MarkerEntity>> getMarkers() async {
     List<MarkerModel> markersModelList = [];
 
-    final data = await supabaseClient.from('ruta_del_sabor').select('*');
+    final data = await supabaseClient.from('rutas').select('*');
 
     for (var element in data) {
       markersModelList.add(MarkerModel.fromJson(element));
