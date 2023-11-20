@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/domain/entities/marker_entity.dart';
+import 'package:rionegro_marca_ciudad/presentation/screens/map/map_screen.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/map/image_slideshow.dart';
 
 class DialogDetails extends StatelessWidget {
   final MarkerEntity marker;
-  const DialogDetails({super.key, required this.marker});
+  final Routes selectedRoute;
+
+  const DialogDetails(
+      {super.key, required this.marker, required this.selectedRoute});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -33,13 +36,13 @@ class DialogDetails extends StatelessWidget {
           ),
         ),
         Positioned(
-            top: 100,
+            top: 95,
             left: 90,
             right: 80,
             child: Container(
-              height: 40,
+              height: 50,
               decoration: BoxDecoration(
-                  color: AppTheme.colorApp1,
+                  color: selectedRoute.color,
                   borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(40),
                       topRight: Radius.circular(40))),
@@ -59,17 +62,14 @@ class DialogDetails extends StatelessWidget {
                 ],
               ),
             )),
-        Positioned(
-            top: 80,
-            left: 20,
-            child: Image.asset('assets/rutas/logo_sabor.png', height: 80)),
+        Positioned(top: 80, left: 20, child: selectedRoute.logo),
         Positioned(
             top: 100,
             right: 20,
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: AppTheme.colorApp1),
+                  shape: BoxShape.circle, color: selectedRoute.color),
               child: Center(
                 child: IconButton(
                     color: Colors.white,

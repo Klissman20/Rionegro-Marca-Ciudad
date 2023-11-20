@@ -55,20 +55,40 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     ref.read(markersListProvider.notifier).getMarkers();
     switch (widget.category) {
       case 1:
-        selectedRoute =
-            Routes(color: AppTheme.colorApp1, title: 'Ruta del Sabor');
+        selectedRoute = Routes(
+            color: AppTheme.colorApp1,
+            title: 'Ruta del Sabor',
+            logo: Image.asset(
+              'assets/rutas/logo_sabor.png',
+              height: 80,
+            ));
         break;
       case 2:
-        selectedRoute =
-            Routes(color: AppTheme.colorApp2, title: 'Ruta de la Historia');
+        selectedRoute = Routes(
+            color: AppTheme.colorApp2,
+            title: 'Ruta de la Historia',
+            logo: Image.asset(
+              'assets/rutas/logo_historia.png',
+              height: 80,
+            ));
         break;
       case 3:
         selectedRoute = Routes(
-            color: AppTheme.colorApp3, title: 'Ruta de la Sostenibilidad');
+            color: AppTheme.colorApp3,
+            title: 'Ruta de la Sostenibilidad',
+            logo: Image.asset(
+              'assets/rutas/logo_sostenibilidad.png',
+              height: 80,
+            ));
         break;
       case 4:
-        selectedRoute =
-            Routes(color: AppTheme.colorApp4, title: 'Ruta de las Flores');
+        selectedRoute = Routes(
+            color: AppTheme.colorApp4,
+            title: 'Ruta de las Flores',
+            logo: Image.asset(
+              'assets/rutas/logo_flores.png',
+              height: 80,
+            ));
         break;
       default:
     }
@@ -201,7 +221,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       pageBuilder: (context, __, ___) {
         return Material(
             color: Colors.transparent,
-            child: Center(child: DialogDetails(marker: marker)));
+            child: Center(
+                child: DialogDetails(
+              marker: marker,
+              selectedRoute: selectedRoute,
+            )));
       },
       transitionBuilder: (_, anim, __, child) {
         Tween<Offset> tween;
@@ -330,6 +354,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 class Routes {
   final String title;
   final Color color;
+  final Image logo;
 
-  Routes({required this.title, required this.color});
+  Routes({required this.title, required this.color, required this.logo});
 }
