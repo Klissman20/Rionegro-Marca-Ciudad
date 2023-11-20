@@ -14,6 +14,7 @@ import 'package:rionegro_marca_ciudad/presentation/providers/initial_loading_pro
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/full_screen_loader.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/map/dialog_details.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   static const String name = 'map-screen';
@@ -246,6 +247,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
+  _launchURL() async {
+    const url = 'https://rionegro.gov.co/es/marca-ciudad-rionegro/';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final initialLoading = ref.watch(initialLoadingProvider);
@@ -307,7 +317,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         Positioned(
             top: 55,
             left: 20,
-            child: Image.asset('assets/logo.png', height: 90))
+            child: InkWell(
+                onTap: _launchURL,
+                child: Image.asset('assets/logo.png', height: 90)))
       ]),
       bottomSheet: Container(
         width: double.infinity,
