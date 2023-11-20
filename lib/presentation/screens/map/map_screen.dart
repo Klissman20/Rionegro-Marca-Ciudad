@@ -43,6 +43,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Map<PolylineId, Polyline> polylines = {};
 
   final isAndroid = Platform.isAndroid;
+  final isIOS = Platform.isIOS;
 
   late Routes selectedRoute;
 
@@ -69,10 +70,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         selectedRoute =
             Routes(color: AppTheme.colorApp4, title: 'Ruta de las Flores');
         break;
-      case 5:
-        selectedRoute =
-            Routes(color: AppTheme.colorApp5, title: 'Festividades y eventos');
-        break;
       default:
     }
     super.initState();
@@ -92,12 +89,22 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               const ImageConfiguration(size: Size(5, 5)),
               'assets/rutas/logo_historia_android.png');
           break;
+        case 3:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_sostenibilidad_android.png');
+          break;
+        case 4:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_flores_android.png');
+          break;
         default:
           pinLocationIcon = await BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(size: Size(5, 5)),
               'assets/rutas/logo_sabor_android.png');
       }
-    } else {
+    } else if (isIOS) {
       switch (widget.category) {
         case 1:
           pinLocationIcon = await BitmapDescriptor.fromAssetImage(
@@ -107,6 +114,14 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           pinLocationIcon = await BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(size: Size(5, 5)),
               'assets/rutas/logo_historia_ios.png');
+        case 3:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_sostenibilidad_ios.png');
+        case 4:
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(5, 5)),
+              'assets/rutas/logo_flores_ios.png');
         default:
           pinLocationIcon = await BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(size: Size(5, 5)),

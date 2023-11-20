@@ -9,7 +9,6 @@ class ImageSlideShow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     return SizedBox(
       height: 220,
       width: double.infinity,
@@ -19,10 +18,6 @@ class ImageSlideShow extends StatelessWidget {
         autoplay: false,
         duration: 1200,
         curve: Curves.easeInOutCubic,
-        pagination: SwiperPagination(
-            margin: const EdgeInsets.only(top: 0),
-            builder: DotSwiperPaginationBuilder(
-                activeColor: colors.primary, color: colors.secondary)),
         itemCount: imageList.length,
         itemBuilder: (context, index) {
           final image = imageList[index];
