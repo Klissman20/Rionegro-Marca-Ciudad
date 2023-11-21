@@ -7,6 +7,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:rionegro_marca_ciudad/config/constants/environment.dart';
 import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/domain/entities/marker_entity.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/google_map_provider.dart';
@@ -37,6 +38,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   final GlobalKey<ScaffoldState> key = GlobalKey();
   double myLocationDistance = 0.0;
   late PointLatLng myLocation;
+  String googleAPiKey = Environment.googleApiKey;
+  String distance = '';
 
   // Draw Route GoTo Point
   late PolylinePoints polylinePoints = PolylinePoints();
@@ -62,6 +65,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             logo: Image.asset(
               'assets/rutas/logo_sabor.png',
               height: 80,
+            ),
+            minilogo: Image.asset(
+              'assets/rutas/logo_sabor.png',
+              height: 50,
             ));
         break;
       case 2:
@@ -71,6 +78,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             logo: Image.asset(
               'assets/rutas/logo_historia.png',
               height: 80,
+            ),
+            minilogo: Image.asset(
+              'assets/rutas/logo_historia.png',
+              height: 50,
             ));
         break;
       case 3:
@@ -80,6 +91,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             logo: Image.asset(
               'assets/rutas/logo_sostenibilidad.png',
               height: 80,
+            ),
+            minilogo: Image.asset(
+              'assets/rutas/logo_sostenibilidad.png',
+              height: 50,
             ));
         break;
       case 4:
@@ -89,6 +104,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             logo: Image.asset(
               'assets/rutas/logo_flores.png',
               height: 80,
+            ),
+            minilogo: Image.asset(
+              'assets/rutas/logo_flores.png',
+              height: 50,
             ));
         break;
       default:
@@ -168,7 +187,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   Future setMarkers(int filter) async {
-    markers = await ref.read(markersListProvider);
+    markers = ref
+        .read(markersListProvider)
+        .where((element) => element.category == widget.category)
+        .toList();
+
     _markers.clear();
     for (final marker in markers) {
       _markers.add(Marker(
@@ -177,11 +200,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           infoWindow: InfoWindow(
             title: marker.name,
             onTap: () {
-              showCustomDialog(context, marker);
+              showCustomDialog(context, marker, widget.category);
             },
           ),
           onTap: () {
-            showCustomDialog(context, marker);
+            showCustomDialog(context, marker, widget.category);
           },
           icon: pinLocationIcon));
     }
@@ -210,9 +233,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     CameraUpdate cameraUpdate = CameraUpdate.newLatLngBounds(bounds, 50);
     Timer(const Duration(milliseconds: 800),
         () => mapController.animateCamera(cameraUpdate));
+    setState(() {});
   }
 
-  void showCustomDialog(BuildContext context, MarkerEntity marker) {
+  void showCustomDialog(BuildContext context, MarkerEntity marker, category) {
     showGeneralDialog(
       context: context,
       barrierLabel: "Barrier",
@@ -226,6 +250,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 child: DialogDetails(
               marker: marker,
               selectedRoute: selectedRoute,
+              category: category,
+              getPolyline: getPolyline,
+              onInstagramSelected: _launchInstagram,
             )));
       },
       transitionBuilder: (_, anim, __, child) {
@@ -247,12 +274,94 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
+  Future<void> getPolyline(MarkerEntity marker) async {
+    PointLatLng destination =
+        PointLatLng(marker.position.latitude, marker.position.longitude);
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleAPiKey, myLocation, destination,
+        travelMode:
+            myLocationDistance < 5.0 ? TravelMode.walking : TravelMode.driving);
+    clearPolylines();
+    double minLat = 0;
+    double minLong = 0;
+    double maxLat = 0;
+    double maxLong = 0;
+    if (result.points.isNotEmpty) {
+      minLat = result.points.first.latitude;
+      minLong = result.points.first.longitude;
+      maxLat = result.points.first.latitude;
+      maxLong = result.points.first.longitude;
+      for (var point in result.points) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        if (point.latitude < minLat) minLat = point.latitude;
+        if (point.latitude > maxLat) maxLat = point.latitude;
+        if (point.longitude < minLong) minLong = point.longitude;
+        if (point.longitude > maxLong) maxLong = point.longitude;
+      }
+    }
+
+    double totalDistance = 0;
+    for (var i = 0; i < polylineCoordinates.length - 1; i++) {
+      totalDistance += calculateDistance(
+          polylineCoordinates[i].latitude,
+          polylineCoordinates[i].longitude,
+          polylineCoordinates[i + 1].latitude,
+          polylineCoordinates[i + 1].longitude);
+    }
+    distance = totalDistance < 1
+        ? '${(totalDistance * 1000).round()} mts.'
+        : '${totalDistance.toStringAsFixed(2)} Kms.';
+
+    LatLngBounds bounds = LatLngBounds(
+        southwest: LatLng(minLat, minLong), northeast: LatLng(maxLat, maxLong));
+    CameraUpdate cameraUpdate = CameraUpdate.newLatLngBounds(bounds, 50);
+    PolylineId id = const PolylineId("poly");
+    Polyline polyline = Polyline(
+      consumeTapEvents: true,
+      onTap: () {
+        mapController.animateCamera(cameraUpdate);
+      },
+      polylineId: id,
+      color: selectedRoute.color,
+      width: 7,
+      endCap: Cap.roundCap,
+      startCap: Cap.roundCap,
+      points: polylineCoordinates,
+    );
+    polylines[id] = polyline;
+    mapController.animateCamera(cameraUpdate);
+    _markers.add(Marker(
+        markerId: const MarkerId('Distance'),
+        alpha: 0,
+        position:
+            polylineCoordinates[(polylineCoordinates.length / 2).floor()]));
+    setState(() {});
+    Timer(const Duration(milliseconds: 150),
+        () => mapController.showMarkerInfoWindow(const MarkerId('Distance')));
+    setState(() {});
+  }
+
+  void clearPolylines() {
+    polylines.clear();
+    polylineCoordinates.clear();
+    _markers.removeWhere(
+        (element) => element.markerId == const MarkerId('Distance'));
+  }
+
   _launchURL() async {
     const url = 'https://rionegro.gov.co/es/marca-ciudad-rionegro/';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
+    }
+  }
+
+  _launchInstagram(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      print("can't open Instagram");
     }
   }
 
@@ -290,6 +399,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           mapToolbarEnabled: false,
           initialCameraPosition:
               CameraPosition(target: initialMapCenter, zoom: 13),
+          polylines: Set.of(polylines.values),
         ),
         Positioned(
           child: Container(
@@ -367,6 +477,11 @@ class Routes {
   final String title;
   final Color color;
   final Image logo;
+  final Image minilogo;
 
-  Routes({required this.title, required this.color, required this.logo});
+  Routes(
+      {required this.title,
+      required this.color,
+      required this.logo,
+      required this.minilogo});
 }
