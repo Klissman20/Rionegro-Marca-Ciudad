@@ -4,6 +4,7 @@ import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/login/password_field_box.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/login/text_field_box.dart';
+import 'package:rionegro_marca_ciudad/presentation/widgets/login/welcome.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String name = 'login-screen';
@@ -28,19 +29,30 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // @override
-  // void initState() {
-  //   Future.delayed(Duration.zero, () {
-  //     showGeneralDialog(
-  //       context: context,
-  //       barrierDismissible: false,
-  //       pageBuilder: (context, a1, a2) => Container(),
-  //       transitionBuilder: (context, a1, a2, child) => WelcomeDialog(),
-  //     );
-  //   });
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      showGeneralDialog(
+        context: context,
+        barrierLabel: "Barrier",
+        barrierDismissible: true,
+        barrierColor: Colors.black.withOpacity(0.8),
+        transitionDuration: const Duration(milliseconds: 700),
+        pageBuilder: (context, __, ___) {
+          return const Material(
+              color: Colors.transparent, child: Center(child: WelcomeDialog()));
+        },
+        transitionBuilder: (_, anim, __, child) {
+          return FadeTransition(
+            opacity: anim,
+            child: child,
+          );
+        },
+      );
+    });
 
-  //   super.initState();
-  // }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
