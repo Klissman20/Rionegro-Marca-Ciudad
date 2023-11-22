@@ -13,6 +13,7 @@ class ImageSlideShow extends StatelessWidget {
       height: 220,
       width: double.infinity,
       child: Swiper(
+        loop: false,
         viewportFraction: 1,
         scale: 0.9,
         autoplay: false,

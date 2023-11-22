@@ -420,12 +420,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     onPressed: () {
                       context.pushReplacementNamed(HomeScreen.name);
                     },
-                    icon: const Icon(Icons.home, color: Colors.white)),
+                    icon: const Icon(Icons.home_outlined, color: Colors.white)),
                 IconButton(
                     onPressed: () {
                       context.goNamed(LoginScreen.name);
                     },
-                    icon: const Icon(Icons.exit_to_app, color: Colors.white))
+                    icon: const Icon(Icons.exit_to_app_rounded,
+                        color: Colors.white))
               ],
             ),
           ),

@@ -58,7 +58,6 @@ En esta aplicación encontrarás información sobre:""",
                           style: TextStyle(fontSize: 12),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 20),
                         Text(
                           'Eventos culturales',
                           style: TextStyle(
@@ -72,7 +71,6 @@ En esta aplicación encontrarás información sobre:""",
                           style: TextStyle(fontSize: 12),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 20),
                         Text(
                           'Opciones de alojamiento y restaurantes',
                           style: TextStyle(
@@ -82,11 +80,18 @@ En esta aplicación encontrarás información sobre:""",
                           textAlign: TextAlign.center,
                         ),
                         const Text(
-                          """El Festival Internacional de Teatro de Rionegro, el Festival de la Empanada, etc.""",
+                          """Hoteles, hostales, casas de huéspedes, fincas, etc.""",
                           style: TextStyle(fontSize: 12),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
+                        const Text(
+                          '¡Disfruta tu viaje!',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w800),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
                         ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -124,23 +129,6 @@ En esta aplicación encontrarás información sobre:""",
                   borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(40),
                       topRight: Radius.circular(40))),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('Bienvenido',
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800)),
-                  ),
-                ],
-              ),
             )),
         Positioned(
             top: 60,

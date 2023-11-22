@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
         ),
         SingleChildScrollView(
             child: Padding(
-          padding: const EdgeInsets.only(top: 70),
+          padding: const EdgeInsets.only(top: 50),
           child: Center(
               child: Column(children: [
             const SizedBox(
@@ -70,7 +70,8 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 30, left: 40, right: 40),
               child: Text(
                 descriptionText,
                 style: const TextStyle(
@@ -126,9 +127,7 @@ class HomeScreen extends StatelessWidget {
             _CustomButton(
               text: 'Festividades y eventos',
               color: AppTheme.colorApp5,
-              onPressed: () {
-                context.goNamed(MapScreen.name);
-              },
+              onPressed: () {},
             ),
             const SizedBox(
               height: 40,

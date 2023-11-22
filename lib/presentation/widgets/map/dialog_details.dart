@@ -97,8 +97,8 @@ class _DialogDetailsState extends State<DialogDetails> {
             )),
         Positioned(
             bottom: 140,
-            left: 40,
-            right: 40,
+            left: 0,
+            right: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -150,25 +150,25 @@ class CustomDialogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       height: 30,
       decoration: BoxDecoration(
           color: selectedRoute.color,
           borderRadius: const BorderRadius.all(Radius.circular(15))),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          selectedRoute.minilogo,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(name,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            selectedRoute.minilogo,
+            Text(name,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: Colors.white, fontSize: 12)),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
