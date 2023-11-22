@@ -26,6 +26,10 @@ final appRouter = GoRouter(
     GoRoute(
         name: SplashScreenAnimated.name,
         path: '/',
-        builder: (context, state) => const SplashScreenAnimated())
+        builder: (context, state) => const SplashScreenAnimated()),
+    GoRoute(
+        path: '/events',
+        name: EventsScreen.name,
+        builder: (context, state) => const EventsScreen()),
   ],
 );

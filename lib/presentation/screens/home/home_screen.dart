@@ -127,7 +127,9 @@ class HomeScreen extends StatelessWidget {
             _CustomButton(
               text: 'Festividades y eventos',
               color: AppTheme.colorApp5,
-              onPressed: () {},
+              onPressed: () {
+                context.goNamed(EventsScreen.name);
+              },
             ),
             const SizedBox(
               height: 40,
