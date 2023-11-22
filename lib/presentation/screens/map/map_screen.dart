@@ -12,6 +12,7 @@ import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/domain/entities/marker_entity.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/google_map_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/initial_loading_provider.dart';
+import 'package:rionegro_marca_ciudad/presentation/providers/marker_repository_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/full_screen_loader.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/map/dialog_details.dart';
@@ -199,11 +200,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           position: marker.position,
           infoWindow: InfoWindow(
             title: marker.name,
-            onTap: () {
-              showCustomDialog(context, marker, widget.category);
+            onTap: () async {
+              selectedMarker = await ref
+                  .read(markerRepositoryProvider)
+                  .getMarkerImage(marker);
+              showCustomDialog(context, selectedMarker!, widget.category);
             },
           ),
-          onTap: () {
+          onTap: () async {
+            selectedMarker =
+                await ref.read(markerRepositoryProvider).getMarkerImage(marker);
             showCustomDialog(context, marker, widget.category);
           },
           icon: pinLocationIcon));

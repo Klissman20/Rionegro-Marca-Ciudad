@@ -13,6 +13,6 @@ class MarkerMapper {
           latitude: markersb.latitude,
           category: markersb.category,
           longitude: markersb.longitude,
-          imageList: [],
+          image: null,
           celphone: markersb.celphone);
 }

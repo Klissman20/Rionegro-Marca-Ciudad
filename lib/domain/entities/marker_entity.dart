@@ -9,7 +9,7 @@ class MarkerEntity {
   final double longitude;
   final int category;
   final String? urlInstagram;
-  final List<Image>? imageList;
+  Image? image;
   final Future<BitmapDescriptor>? iconMarker;
   final LatLng position;
   final int? celphone;
@@ -24,6 +24,6 @@ class MarkerEntity {
       required this.name,
       required this.description,
       required this.position,
-      this.imageList,
+      this.image,
       required this.celphone});
 }

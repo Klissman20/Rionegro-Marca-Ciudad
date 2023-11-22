@@ -49,12 +49,15 @@ class _Slide extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: Image(
                   image: image.image,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                   loadingBuilder: (context, child, loadingProgress) {
                     return (loadingProgress != null)
                         ? const DecoratedBox(
                             decoration: BoxDecoration(color: Colors.black12))
                         : FadeIn(child: child);
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset('assets/logo.png');
                   }),
             )));
   }

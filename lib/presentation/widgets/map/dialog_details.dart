@@ -38,8 +38,9 @@ class _DialogDetailsState extends State<DialogDetails> {
                 child: SingleChildScrollView(
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     const SizedBox(height: 10),
-                    ImageSlideShow(imageList: [Image.asset('assets/logo.png')]),
-                    const SizedBox(height: 10),
+                    ImageSlideShow(imageList: [
+                      widget.marker.image ?? Image.asset('assets/logo.png')
+                    ]),
                     Text(
                       widget.marker.description,
                       overflow: TextOverflow.fade,
@@ -96,8 +97,8 @@ class _DialogDetailsState extends State<DialogDetails> {
             )),
         Positioned(
             bottom: 140,
-            left: 70,
-            right: 60,
+            left: 40,
+            right: 40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

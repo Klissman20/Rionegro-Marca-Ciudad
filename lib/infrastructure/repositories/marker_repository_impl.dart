@@ -11,4 +11,9 @@ class MarkerRepositoryImpl extends MarkerRespository {
   Future<List<MarkerEntity>> getMarkers() async {
     return datasource.getMarkers();
   }
+
+  @override
+  Future<MarkerEntity> getMarkerImage(MarkerEntity marker) {
+    return datasource.getMarkerImage(marker);
+  }
 }
