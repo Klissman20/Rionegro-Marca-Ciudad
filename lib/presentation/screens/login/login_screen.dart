@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
+import 'package:rionegro_marca_ciudad/presentation/providers/auth_repository_provider.dart';
+import 'package:rionegro_marca_ciudad/presentation/providers/supabase_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/login/password_field_box.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/login/text_field_box.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/login/welcome.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   static const String name = 'login-screen';
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   TextEditingController controllerUser = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
 
@@ -31,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
+    _setupAuthListener();
     Future.delayed(Duration.zero, () {
       showGeneralDialog(
         context: context,
@@ -52,6 +58,15 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     super.initState();
+  }
+
+  void _setupAuthListener() {
+    ref.read(supabaseProvider).auth.onAuthStateChange.listen((data) {
+      final event = data.event;
+      if (event == AuthChangeEvent.signedIn) {
+        context.goNamed(HomeScreen.name);
+      }
+    });
   }
 
   @override
@@ -218,11 +233,11 @@ class _LogInButton extends StatelessWidget {
   }
 }
 
-class _GoogleButton extends StatelessWidget {
+class _GoogleButton extends ConsumerWidget {
   const _GoogleButton();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const TextStyle textStyleBtn = TextStyle(
         color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
 
@@ -260,17 +275,22 @@ class _GoogleButton extends StatelessWidget {
         ),
         onPressed: () async {
           FocusScope.of(context).unfocus();
+          final response =
+              await ref.read(authRepositoryProvider).continueWithGoogle();
+          if (response['state'] == 'ok')
+            context
+                .goNamed(HomeScreen.name); // context.goNamed(HomeScreen.name);
         },
       ),
     );
   }
 }
 
-class _AppleButton extends StatelessWidget {
+class _AppleButton extends ConsumerWidget {
   const _AppleButton();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const TextStyle textStyleBtn = TextStyle(
         color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
 
@@ -308,6 +328,7 @@ class _AppleButton extends StatelessWidget {
         ),
         onPressed: () async {
           FocusScope.of(context).unfocus();
+          await ref.read(authRepositoryProvider).continueWithApple();
         },
       ),
     );
