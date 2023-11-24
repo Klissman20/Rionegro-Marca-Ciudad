@@ -112,7 +112,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: CustomTextField(
                         controller: controllerUser,
                         labelText: 'Usuario',
-                        onChanged: () {},
+                        onChanged: () {
+                          setState(() {
+                            inputUser = controllerUser.text;
+                          });
+                        },
                         prefixIcon: Icons.person_outlined,
                         typeText: TextInputType.emailAddress),
                   ),
@@ -138,7 +142,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: _LogInButton(
                       text: 'Ingresar',
-                      user: inputUser.trim(),
+                      user: inputUser,
                       password: inputPassword,
                       valid: errorTextPassword(controllerPassword.value.text) !=
                               null ||
@@ -193,7 +197,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 }
 
-class _LogInButton extends StatelessWidget {
+class _LogInButton extends ConsumerWidget {
   final String text;
   final String user;
   final String password;
@@ -206,13 +210,32 @@ class _LogInButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       height: 60,
       width: double.infinity,
       child: ElevatedButton(
-          onPressed: () {
-            context.goNamed(HomeScreen.name);
+          onPressed: () async {
+            final response = await ref
+                .read(authRepositoryProvider)
+                .signIn(email: user, password: password);
+            if (response['state'] == 'ok') {
+              return context.goNamed(MapScreen.name);
+            }
+            await showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('Ups!'),
+                content: Text(removeFirstWord(response['error'].toString())),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop();
+                      },
+                      child: const Text("Ok"))
+                ],
+              ),
+            );
           },
           style: ButtonStyle(
               backgroundColor:
@@ -328,9 +351,20 @@ class _AppleButton extends ConsumerWidget {
         ),
         onPressed: () async {
           FocusScope.of(context).unfocus();
-          await ref.read(authRepositoryProvider).continueWithApple();
+          final response =
+              await ref.read(authRepositoryProvider).continueWithApple();
+          if (response['state'] == 'ok') context.goNamed(HomeScreen.name);
         },
       ),
     );
   }
+}
+
+String removeFirstWord(String input) {
+  List<String> words = input.split(' ');
+  if (words.length <= 1) {
+    return '';
+  }
+  words.removeAt(0);
+  return words.join(' ');
 }

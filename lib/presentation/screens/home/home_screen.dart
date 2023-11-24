@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
+import 'package:rionegro_marca_ciudad/presentation/providers/auth_repository_provider.dart';
 
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   static const String name = 'home-screen';
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     String homeText =
         """Una ciudad verde, histórica y desarrollada que conserva las tradiciones antioqueñas y conecta la región con el mundo.""";
 
@@ -26,6 +28,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
+              ref.read(authRepositoryProvider).signOut();
               context.goNamed(LoginScreen.name);
             },
             icon: const Icon(Icons.exit_to_app),

@@ -85,6 +85,14 @@ class AuthFirebaseDataSourceImpl extends AuthSupabaseDataSource {
 
   @override
   Future<Map<String, dynamic>> continueWithApple() async {
-    throw Exception('Not implemented yet');
+    try {
+      if (Platform.isIOS) {
+        final response = await _supabaseAuth.auth.signInWithApple();
+        return {'user': (response.user), 'state': 'ok'};
+      }
+    } on Exception catch (e) {
+      return {'user': null, 'state': 'failed', 'error': e};
+    }
+    return {'user': null, 'state': 'failed'};
   }
 }

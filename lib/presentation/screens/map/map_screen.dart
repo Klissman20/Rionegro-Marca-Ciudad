@@ -10,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rionegro_marca_ciudad/config/constants/environment.dart';
 import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/domain/entities/marker_entity.dart';
+import 'package:rionegro_marca_ciudad/presentation/providers/auth_repository_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/google_map_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/initial_loading_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/marker_repository_provider.dart';
@@ -423,6 +424,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     icon: const Icon(Icons.home_outlined, color: Colors.white)),
                 IconButton(
                     onPressed: () {
+                      ref.read(authRepositoryProvider).signOut();
                       context.goNamed(LoginScreen.name);
                     },
                     icon: const Icon(Icons.exit_to_app_rounded,
