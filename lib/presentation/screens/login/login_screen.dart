@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/auth_repository_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/supabase_provider.dart';

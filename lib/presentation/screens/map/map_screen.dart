@@ -356,7 +356,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   _launchURL() async {
-    const url = 'https://rionegro.gov.co/es/marca-ciudad-rionegro/';
+    const url = 'https://ciudadrionegro.co/';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {

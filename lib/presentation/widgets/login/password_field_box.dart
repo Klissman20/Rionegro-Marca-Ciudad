@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 
 class PasswordFieldBox extends StatefulWidget {
   final TextEditingController controller;
@@ -43,14 +44,14 @@ class _PasswordFieldBoxState extends State<PasswordFieldBox> {
           borderSide: BorderSide(color: Colors.white, width: 1.0)),
       label: const Text('Password'),
       labelStyle: const TextStyle(color: Colors.white),
-      focusedErrorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          borderSide: BorderSide(color: Colors.red, width: 1.0)),
-      errorStyle: const TextStyle(
-          color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12),
-      errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          borderSide: BorderSide(color: Colors.red, width: 1.0)),
+      focusedErrorBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+          borderSide: BorderSide(color: AppTheme.colorApp2, width: 1.0)),
+      errorStyle: TextStyle(
+          color: AppTheme.colorApp2, fontWeight: FontWeight.bold, fontSize: 12),
+      errorBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+          borderSide: BorderSide(color: AppTheme.colorApp2, width: 1.0)),
       suffixIcon: IconButton(
         icon: Icon(
           _passwordVisible ? Icons.visibility_off : Icons.visibility,

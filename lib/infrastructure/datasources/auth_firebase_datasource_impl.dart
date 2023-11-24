@@ -4,10 +4,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rionegro_marca_ciudad/domain/datasources/auth_firebase_datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthFirebaseDataSourceImpl extends AuthSupabaseDataSource {
+class AuthSupabaseDataSourceImpl extends AuthSupabaseDataSource {
   final SupabaseClient _supabaseAuth;
 
-  AuthFirebaseDataSourceImpl(this._supabaseAuth);
+  AuthSupabaseDataSourceImpl(this._supabaseAuth);
 
   @override
   Future<Map<String, dynamic>> signUp(

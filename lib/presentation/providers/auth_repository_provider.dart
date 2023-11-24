@@ -6,5 +6,5 @@ import 'package:rionegro_marca_ciudad/presentation/providers/supabase_provider.d
 //repositorio inmutable
 final authRepositoryProvider = Provider((ref) {
   final _supabaseAuth = ref.watch(supabaseProvider);
-  return AuthSupabaseRepositoryImpl(AuthFirebaseDataSourceImpl(_supabaseAuth));
+  return AuthSupabaseRepositoryImpl(AuthSupabaseDataSourceImpl(_supabaseAuth));
 });
