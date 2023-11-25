@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.1.0
+  flutter_launcher_icons: ^0.13.1
   flutter_polyline_points: ^2.0.0
   flutter_riverpod: ^2.4.6
   geolocator: ^10.1.0
@@ -26,6 +27,13 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/logo_foreground.png"
 
 flutter:
   uses-material-design: true
