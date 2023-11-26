@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:rionegro_marca_ciudad/domain/datasources/auth_firebase_datasource.dart';
 import 'package:rionegro_marca_ciudad/domain/repositories/auth_firebase_repository.dart';
 
@@ -29,7 +30,7 @@ class AuthSupabaseRepositoryImpl extends AuthSupabaseRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> continueWithApple() {
-    return datasource.continueWithApple();
+  Future<Map<String, dynamic>> continueWithApple(BuildContext context) {
+    return datasource.continueWithApple(context);
   }
 }

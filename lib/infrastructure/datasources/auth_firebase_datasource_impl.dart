@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rionegro_marca_ciudad/domain/datasources/auth_firebase_datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -84,18 +84,30 @@ class AuthSupabaseDataSourceImpl extends AuthSupabaseDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> continueWithApple() async {
-    
+  Future<Map<String, dynamic>> continueWithApple(BuildContext context) async {
     if (Platform.isIOS) {
       try {
         final response = await _supabaseAuth.auth.signInWithApple();
-          return {'user': (response.user), 'state': 'ok'};
+        return {'user': (response.user), 'state': 'ok'};
       } on Exception catch (e) {
         return {'user': null, 'state': 'failed', 'error': e};
       }
-        
-    }else{
-        return {'user': null, 'state': 'failed'};
     }
+    if (Platform.isAndroid) {
+      try {
+        await _supabaseAuth.auth.signInWithOAuth(Provider.apple,
+            context: context,
+            redirectTo: 'rionegro.turismo://login-callback/login');
+
+        final session = _supabaseAuth.auth.currentSession;
+
+        if (session != null) return {'user': session.user, 'state': 'ok'};
+
+        return {'user': 'apple', 'state': 'failed'};
+      } on Exception catch (e) {
+        return {'user': null, 'state': 'failed', 'error': e};
+      }
+    }
+    throw Exception('Platform not supported');
   }
 }

@@ -348,11 +348,13 @@ class _AppleButton extends ConsumerWidget {
             ),
           ],
         ),
-        onPressed: () async {
+        onPressed: () {
           FocusScope.of(context).unfocus();
-          final response =
-              await ref.read(authRepositoryProvider).continueWithApple();
-          if (response['state'] == 'ok') context.goNamed(HomeScreen.name);
+          ref.read(authRepositoryProvider).continueWithApple(context);
+          final session = ref.read(supabaseProvider).auth.currentSession;
+          if (session != null) {
+            context.goNamed(HomeScreen.name);
+          }
         },
       ),
     );

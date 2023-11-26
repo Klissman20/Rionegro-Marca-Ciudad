@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 abstract class AuthSupabaseRepository {
   Future<Map<String, dynamic>> signUp(
       {required String email, required String password});
@@ -9,5 +11,5 @@ abstract class AuthSupabaseRepository {
 
   Future<Map<String, dynamic>> continueWithGoogle();
 
-  Future<Map<String, dynamic>> continueWithApple();
+  Future<Map<String, dynamic>> continueWithApple(BuildContext context);
 }
