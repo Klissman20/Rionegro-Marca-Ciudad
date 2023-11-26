@@ -85,14 +85,17 @@ class AuthSupabaseDataSourceImpl extends AuthSupabaseDataSource {
 
   @override
   Future<Map<String, dynamic>> continueWithApple() async {
-    try {
-      if (Platform.isIOS) {
+    
+    if (Platform.isIOS) {
+      try {
         final response = await _supabaseAuth.auth.signInWithApple();
-        return {'user': (response.user), 'state': 'ok'};
+          return {'user': (response.user), 'state': 'ok'};
+      } on Exception catch (e) {
+        return {'user': null, 'state': 'failed', 'error': e};
       }
-    } on Exception catch (e) {
-      return {'user': null, 'state': 'failed', 'error': e};
+        
+    }else{
+        return {'user': null, 'state': 'failed'};
     }
-    return {'user': null, 'state': 'failed'};
   }
 }
