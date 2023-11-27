@@ -1,28 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
+import 'package:rionegro_marca_ciudad/domain/entities/event_entity.dart';
+import 'package:rionegro_marca_ciudad/presentation/providers/event_repository_provider.dart';
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
+import 'package:rionegro_marca_ciudad/presentation/widgets/events/event_listview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class EventsScreen extends StatelessWidget {
+class EventsScreen extends ConsumerStatefulWidget {
   static const String name = 'events-screen';
   const EventsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Future<void> launchURL() async {
-      const url = 'https://rionegro.gov.co/es/marca-ciudad-rionegro/';
-      if (await canLaunchUrl(Uri.parse(url))) {
-        await launchUrl(Uri.parse(url));
-      } else {
-        throw 'Could not launch $url';
-      }
-    }
+  _EventsScreenState createState() => _EventsScreenState();
+}
 
+class _EventsScreenState extends ConsumerState<EventsScreen> {
+  List<EventEntity> events = [];
+
+  Future<void> launchURL() async {
+    const url = 'https://ciudadrionegro.co';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  void initState() {
+    ref
+        .read(eventRepositoryProvider)
+        .getEvents()
+        .then((value) => setState(() => events = value));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
         Container(
           width: double.infinity,
+          height: double.infinity,
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/background.png'),
@@ -94,7 +115,13 @@ class EventsScreen extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
+        Positioned(
+            top: 210,
+            left: 10,
+            right: 10,
+            bottom: 20,
+            child: EventsListView(events: events)),
       ]),
     );
   }

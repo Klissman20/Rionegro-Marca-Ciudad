@@ -3,7 +3,7 @@ import 'package:rionegro_marca_ciudad/domain/entities/marker_entity.dart';
 import 'package:rionegro_marca_ciudad/infrastructure/models/marker_model.dart';
 
 class MarkerMapper {
-  static MarkerEntity markerFirebaseToEntity(MarkerModel markersb) =>
+  static MarkerEntity markerSupabaseToEntity(MarkerModel markersb) =>
       MarkerEntity(
           id: markersb.id,
           name: markersb.name,

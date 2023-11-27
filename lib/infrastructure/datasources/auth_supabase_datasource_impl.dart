@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:rionegro_marca_ciudad/domain/datasources/auth_firebase_datasource.dart';
+import 'package:rionegro_marca_ciudad/domain/datasources/auth_supabase_datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthSupabaseDataSourceImpl extends AuthSupabaseDataSource {

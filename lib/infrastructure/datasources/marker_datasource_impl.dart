@@ -19,7 +19,7 @@ class MarkerDatasourceImpl extends MarkerDatasource {
     }
 
     return markersModelList
-        .map((marker) => MarkerMapper.markerFirebaseToEntity(marker))
+        .map((marker) => MarkerMapper.markerSupabaseToEntity(marker))
         .toList();
   }
 
