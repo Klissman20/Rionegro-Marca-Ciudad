@@ -423,8 +423,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     },
                     icon: const Icon(Icons.home_outlined, color: Colors.white)),
                 IconButton(
-                    onPressed: () {
-                      ref.read(authRepositoryProvider).signOut();
+                    onPressed: () async {
+                      await ref.read(authRepositoryProvider).signOut();
                       context.goNamed(LoginScreen.name);
                     },
                     icon: const Icon(Icons.exit_to_app_rounded,

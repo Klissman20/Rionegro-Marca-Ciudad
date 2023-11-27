@@ -27,8 +27,8 @@ class HomeScreen extends ConsumerWidget {
         toolbarHeight: 40.0,
         actions: [
           IconButton(
-            onPressed: () {
-              ref.read(authRepositoryProvider).signOut();
+            onPressed: () async {
+              await ref.read(authRepositoryProvider).signOut();
               context.goNamed(LoginScreen.name);
             },
             icon: const Icon(Icons.exit_to_app),
