@@ -117,7 +117,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           ),
         ),
         Positioned(
-            top: 210,
+            top: 200,
             left: 10,
             right: 10,
             bottom: 20,

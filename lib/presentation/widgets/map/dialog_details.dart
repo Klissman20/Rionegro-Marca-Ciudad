@@ -9,6 +9,7 @@ class DialogDetails extends StatefulWidget {
   final int category;
   final Future<void> Function(MarkerEntity) getPolyline;
   final Function(String) onInstagramSelected;
+  final Function(String) onWhatsappSelected;
 
   const DialogDetails(
       {super.key,
@@ -16,7 +17,8 @@ class DialogDetails extends StatefulWidget {
       required this.selectedRoute,
       required this.category,
       required this.getPolyline,
-      required this.onInstagramSelected});
+      required this.onInstagramSelected,
+      required this.onWhatsappSelected});
 
   @override
   State<DialogDetails> createState() => _DialogDetailsState();
@@ -28,13 +30,13 @@ class _DialogDetailsState extends State<DialogDetails> {
     return Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 120, horizontal: 40),
+          padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 40),
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(20)),
             child: Padding(
                 padding: const EdgeInsets.only(
-                    bottom: 65.0, right: 20, left: 20, top: 30),
+                    bottom: 85.0, right: 20, left: 20, top: 30),
                 child: SingleChildScrollView(
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     const SizedBox(height: 10),
@@ -51,7 +53,7 @@ class _DialogDetailsState extends State<DialogDetails> {
           ),
         ),
         Positioned(
-            top: 95,
+            top: 75,
             left: 90,
             right: 80,
             child: Container(
@@ -77,9 +79,9 @@ class _DialogDetailsState extends State<DialogDetails> {
                 ],
               ),
             )),
-        Positioned(top: 80, left: 20, child: widget.selectedRoute.logo),
+        Positioned(top: 60, left: 20, child: widget.selectedRoute.logo),
         Positioned(
-            top: 100,
+            top: 80,
             right: 20,
             child: Container(
               height: 40,
@@ -96,42 +98,71 @@ class _DialogDetailsState extends State<DialogDetails> {
               ),
             )),
         Positioned(
-            bottom: 140,
+            bottom: 150,
             left: 0,
             right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    await widget.getPolyline(widget.marker).then((value) {
-                      setState(() {});
-                      Navigator.of(context).pop();
-                    });
-                  },
-                  child: CustomDialogButton(
-                    name: 'Cómo llegar',
-                    marker: widget.marker,
-                    selectedRoute: widget.selectedRoute,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  (widget.category == 1)
+                      ? InkWell(
+                          onTap: () async {
+                            await widget.onInstagramSelected(
+                                widget.marker.urlInstagram ?? '');
+                          },
+                          child: CustomDialogButton(
+                              marker: widget.marker,
+                              selectedRoute: widget.selectedRoute,
+                              name: 'Instagram'),
+                        )
+                      : const SizedBox(),
+                  (widget.category == 1)
+                      ? InkWell(
+                          onTap: () async {
+                            if (widget.marker.celphone != 0) {
+                              await widget.onWhatsappSelected(
+                                  widget.marker.celphone?.toString() ?? '');
+                            }
+                            return;
+                          },
+                          child: CustomDialogButton(
+                              marker: widget.marker,
+                              selectedRoute: widget.selectedRoute,
+                              name: 'WhatsApp'),
+                        )
+                      : const SizedBox()
+                ],
+              ),
+            )),
+        Positioned(
+            bottom: (widget.category == 1) ? 110 : 130,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      await widget.getPolyline(widget.marker).then((value) {
+                        setState(() {});
+                        Navigator.of(context).pop();
+                      });
+                    },
+                    child: CustomDialogButton(
+                      name: 'Cómo llegar',
+                      marker: widget.marker,
+                      selectedRoute: widget.selectedRoute,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                (widget.category == 1)
-                    ? InkWell(
-                        onTap: () async {
-                          await widget.onInstagramSelected(
-                              widget.marker.urlInstagram ?? '');
-                        },
-                        child: CustomDialogButton(
-                            marker: widget.marker,
-                            selectedRoute: widget.selectedRoute,
-                            name: 'Instagram'),
-                      )
-                    : const SizedBox()
-              ],
-            ))
+                ],
+              ),
+            )),
       ],
     );
   }

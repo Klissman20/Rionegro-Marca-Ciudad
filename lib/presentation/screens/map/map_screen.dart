@@ -260,6 +260,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               category: category,
               getPolyline: getPolyline,
               onInstagramSelected: _launchInstagram,
+              onWhatsappSelected: _launchWhatsapp,
             )));
       },
       transitionBuilder: (_, anim, __, child) {
@@ -368,7 +369,20 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
-      print("can't open Instagram");
+      throw Exception("can't open Instagram");
+    }
+  }
+
+  _launchWhatsapp(String phone) async {
+    var url = "https://wa.me/$phone?text=${Uri.parse('Hola, me interesa')}";
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        throw Exception("can't open Instagram");
+      }
+    } on Exception {
+      throw ('WhatsApp is not installed.');
     }
   }
 

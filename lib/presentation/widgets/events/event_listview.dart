@@ -43,7 +43,7 @@ class _Slide extends ConsumerWidget {
                 color: Colors.white, borderRadius: BorderRadius.circular(20)),
             child: Padding(
                 padding: const EdgeInsets.only(
-                    bottom: 20.0, right: 20, left: 20, top: 30),
+                    bottom: 20, right: 20, left: 20, top: 20),
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
                   const SizedBox(height: 10),
                   Image.network(imageUrl, fit: BoxFit.cover,
@@ -58,9 +58,11 @@ class _Slide extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Fecha: ',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.colorApp5),
                       ),
                       Text(
                         event.date,
@@ -72,9 +74,11 @@ class _Slide extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Lugar: ',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.colorApp5),
                       ),
                       Expanded(
                         child: Text(
@@ -88,9 +92,11 @@ class _Slide extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Hora: ',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.colorApp5),
                       ),
                       Text(
                         event.hour ?? '',
