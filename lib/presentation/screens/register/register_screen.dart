@@ -155,23 +155,23 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField(
-                errorText: errorTextPhone(controllerPhone.value.text),
-                typeText: TextInputType.phone,
-                prefixIcon: Icons.phone_enabled_outlined,
-                controller: controllerPhone,
-                labelText: 'Phone',
-                onChanged: () {
-                  setState(() {
-                    inputPhone = controllerPhone.text.isNotEmpty
-                        ? int.parse(controllerPhone.text)
-                        : 0;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              //CustomTextField(
+              //  errorText: errorTextPhone(controllerPhone.value.text),
+              //  typeText: TextInputType.phone,
+               // prefixIcon: Icons.phone_enabled_outlined,
+              //  controller: controllerPhone,
+              //  labelText: 'Phone',
+              //  onChanged: () {
+              //    setState(() {
+              //      inputPhone = controllerPhone.text.isNotEmpty
+              //          ? int.parse(controllerPhone.text)
+              //          : 0;
+              //    });
+              //  },
+              //),
+              //const SizedBox(
+              //  height: 20,
+              //),
               PasswordFieldBox(
                 errorText: errorTextPassword(controllerPassword.value.text),
                 controller: controllerPassword,
@@ -187,7 +187,7 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
               _RegisterButton(
                 textStyleBtn: textStyleBtn,
                 name: inputName,
-                phone: inputPhone,
+                //phone: inputPhone,
                 password: inputPassword,
                 email: inputEmail,
               ),
@@ -206,7 +206,7 @@ class _RegisterButton extends ConsumerWidget {
   final String? id;
   final String name;
   final String email;
-  final int phone;
+  //final int phone;
   final String password;
 
   _RegisterButton({
@@ -215,7 +215,7 @@ class _RegisterButton extends ConsumerWidget {
     required this.name,
     required this.password,
     required this.email,
-    required this.phone,
+    //required this.phone,
   });
 
   final TextStyle textStyleBtn;
