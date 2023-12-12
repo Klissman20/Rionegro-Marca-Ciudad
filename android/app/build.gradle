@@ -29,7 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.rionegro.turismo"
+    namespace "com.example.rionegro_marca_ciudad"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
