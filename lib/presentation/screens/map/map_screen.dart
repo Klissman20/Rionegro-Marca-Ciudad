@@ -374,7 +374,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   _launchWhatsapp(String phone) async {
-    var url = "https://wa.me/$phone?text=${Uri.parse('Hola, me interesa')}";
+    var url =
+        "https://wa.me/$phone?text=${Uri.parse('Hola, quiero mas información')}";
     try {
       if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url));
@@ -433,7 +434,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               children: [
                 IconButton(
                     onPressed: () {
-                      context.pushReplacementNamed(HomeScreen.name);
+                      context.pop();
                     },
                     icon: const Icon(Icons.home_outlined, color: Colors.white)),
                 IconButton(
