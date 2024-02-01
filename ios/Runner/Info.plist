@@ -43,11 +43,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Needed to access location for getting directions and use Google maps</string>
+	<string>TurismoRionegro needs to use location in order to use maps and helps to get directions for places</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Needed to access location for getting directions and use Google maps</string>
+	<string>TurismoRionegro needs to use location in order to use maps and helps to get directions for places</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Needed to access location for getting directions and use Google maps</string>
+	<string>TurismoRionegro needs to use location in order to use maps and helps to get directions for places</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
