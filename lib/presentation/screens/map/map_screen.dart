@@ -57,7 +57,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void initState() {
     setCustomMapPin();
     initialMapCenter = ref.read(initialCenterProvider);
-    ref.read(userCurrentLocationProvider.notifier).getUserCurrentLocation();
+    //ref.read(userCurrentLocationProvider.notifier).getUserCurrentLocation();
     ref.read(markersListProvider.notifier).getMarkers();
     switch (widget.category) {
       case 1:
@@ -177,7 +177,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
     //controller.setMapStyle(mapStyle);
-    setMarkers(0);
+    setMarkers(null);
   }
 
   double calculateDistance(lat1, lon1, lat2, lon2) {
@@ -188,7 +188,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     return 12742 * asin(sqrt(a));
   }
 
-  Future setMarkers(int filter) async {
+  Future setMarkers(PointLatLng? myLocationaux) async {
     markers = ref
         .read(markersListProvider)
         .where((element) => element.category == widget.category)
@@ -215,10 +215,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           },
           icon: pinLocationIcon));
     }
-    await ref
+    /*await ref
         .read(userCurrentLocationProvider.notifier)
-        .getUserCurrentLocation();
-    myLocation = ref.read(userCurrentLocationProvider);
+        .getUserCurrentLocation();*/
+    myLocation = myLocationaux ?? ref.read(userCurrentLocationProvider);
     myLocationDistance = calculateDistance(
         myLocation.latitude,
         myLocation.longitude,
@@ -259,6 +259,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               selectedRoute: selectedRoute,
               category: category,
               getPolyline: getPolyline,
+              setLocation: setMarkers,
               onInstagramSelected: _launchInstagram,
               onWhatsappSelected: _launchWhatsapp,
             )));
@@ -365,6 +366,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
   }
 
+  _launchURLContact() async {
+    const url = 'https://ciudadrionegro.co/contacto';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   _launchInstagram(String url) async {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
@@ -373,9 +383,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
   }
 
-  _launchWhatsapp(String phone) async {
-    var url =
-        "https://wa.me/$phone?text=${Uri.parse('Hola, quiero mas información')}";
+
+  _launchWhatsapp(String phone, String? msg) async {
+    var url = "https://wa.me/$phone?text=${Uri.parse(msg ?? 'Hola, necesito mas informaciòn')}";
+
     try {
       if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url));
@@ -400,8 +411,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       data: (data) {
         if (data != null) {
           myLocation = PointLatLng(data.latitude, data.longitude);
+          setState(() {});
         }
-        setState(() {});
+        
       },
       error: (error, stackTrace) {
         debugPrint("$error");
@@ -439,8 +451,33 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     icon: const Icon(Icons.home_outlined, color: Colors.white)),
                 IconButton(
                     onPressed: () async {
-                      await ref.read(authRepositoryProvider).signOut();
-                      context.goNamed(LoginScreen.name);
+                      showGeneralDialog(
+                          context: context,
+                          barrierDismissible: true,
+              
+                          barrierLabel: 'Location permissions are permanently denied, we cannot request permissions.',
+                          pageBuilder: (context, animation, secondaryAnimation) {
+                            return AlertDialog(
+                              title: const Text('Aviso!'),
+                              content: const Text(
+                                'Estas a punto de cerrar de sesion. ¿Estas seguro?'
+                              ),
+                              actions: [
+                                TextButton(onPressed: () async{
+                                  await ref.read(authRepositoryProvider).signOut();
+                                  context.goNamed(LoginScreen.name);
+                                  } , child: const Text('Cerrar Sesion')),
+                                TextButton(onPressed: () async{
+                                  await ref.read(authRepositoryProvider).signOut();
+                                  _launchURLContact();
+                                  context.goNamed(LoginScreen.name);
+                                  
+                                  } , child: const Text('Cerrar Sesion y solicitar borrar datos')),
+                              ]
+                            );
+                              
+                          }
+                        );
                     },
                     icon: const Icon(Icons.exit_to_app_rounded,
                         color: Colors.white))

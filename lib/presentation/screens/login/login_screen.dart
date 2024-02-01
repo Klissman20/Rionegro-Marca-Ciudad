@@ -110,7 +110,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: CustomTextField(
                         controller: controllerUser,
-                        labelText: 'Usuario',
+                        labelText: 'Email',
                         onChanged: () {
                           setState(() {
                             inputUser = controllerUser.text;

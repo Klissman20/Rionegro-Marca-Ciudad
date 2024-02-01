@@ -15,6 +15,7 @@ import 'package:rionegro_marca_ciudad/presentation/providers/auth_repository_pro
 
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   static const String name = 'home-screen';
@@ -252,6 +253,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     String descriptionText =
         'Rionegro te ofrece la oportunidad de explorar su rica historia, disfrutar de su belleza natural, degustar la gastronomía local y conectarte con el mundo.';
+    
+    _launchURLContact() async {
+    const url = 'https://ciudadrionegro.co/contacto';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  
+  }
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -263,8 +274,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         actions: [
           IconButton(
             onPressed: () async {
-              await ref.read(authRepositoryProvider).signOut();
-              context.goNamed(LoginScreen.name);
+              showGeneralDialog(
+                          context: context,
+                          barrierDismissible: true,
+              
+                          barrierLabel: 'Location permissions are permanently denied, we cannot request permissions.',
+                          pageBuilder: (context, animation, secondaryAnimation) {
+                            return AlertDialog(
+                              title: const Text('Aviso!'),
+                              content: const Text(
+                                'Estas a punto de cerrar de sesion. ¿Estas seguro?'
+                              ),
+                              actions: [
+                                TextButton(onPressed: () async{
+                                  await ref.read(authRepositoryProvider).signOut();
+                                  context.goNamed(LoginScreen.name);
+                                  } , child: const Text('Cerrar Sesion')),
+                                TextButton(onPressed: () async{
+                                  await ref.read(authRepositoryProvider).signOut();
+                                  _launchURLContact();
+                                  context.goNamed(LoginScreen.name);
+                                  
+                                  } , child: const Text('Cerrar Sesion y solicitar borrar datos')),
+                              ]
+                            );
+                              
+                          }
+                        );
             },
             icon: const Icon(Icons.exit_to_app),
             color: Colors.white,

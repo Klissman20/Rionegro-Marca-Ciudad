@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:rionegro_marca_ciudad/domain/entities/marker_entity.dart';
 import 'package:rionegro_marca_ciudad/presentation/screens/map/map_screen.dart';
 import 'package:rionegro_marca_ciudad/presentation/widgets/map/image_slideshow.dart';
 
-class DialogDetails extends StatefulWidget {
+class DialogDetails extends ConsumerStatefulWidget {
   final MarkerEntity marker;
   final Routes selectedRoute;
   final int category;
   final Future<void> Function(MarkerEntity) getPolyline;
+  final Future<void> Function(PointLatLng?) setLocation;
   final Function(String) onInstagramSelected;
-  final Function(String) onWhatsappSelected;
+  final Function(String, String?) onWhatsappSelected;
 
   const DialogDetails(
       {super.key,
@@ -17,14 +21,18 @@ class DialogDetails extends StatefulWidget {
       required this.selectedRoute,
       required this.category,
       required this.getPolyline,
+      required this.setLocation,
       required this.onInstagramSelected,
       required this.onWhatsappSelected});
 
   @override
-  State<DialogDetails> createState() => _DialogDetailsState();
+  _DialogDetailsState createState() => _DialogDetailsState();
 }
 
-class _DialogDetailsState extends State<DialogDetails> {
+class _DialogDetailsState extends ConsumerState<DialogDetails> {
+
+  late PointLatLng myLocation;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -124,7 +132,7 @@ class _DialogDetailsState extends State<DialogDetails> {
                           onTap: () async {
                             if (widget.marker.celphone != 0) {
                               await widget.onWhatsappSelected(
-                                  widget.marker.celphone?.toString() ?? '');
+                                  widget.marker.celphone.toString(), null);
                             }
                             return;
                           },
@@ -149,10 +157,65 @@ class _DialogDetailsState extends State<DialogDetails> {
                 children: [
                   InkWell(
                     onTap: () async {
+                      LocationPermission permission = await Geolocator.checkPermission();
+                      if (permission == LocationPermission.denied) {
+                        permission = await Geolocator.requestPermission();
+                        if (permission == LocationPermission.denied) {
+                          // Permissions are denied, next time you could try
+                          // requesting permissions again (this is also where
+                          // Android's shouldShowRequestPermissionRationale
+                          // returned true. According to Android guidelines
+                          // your App should show an explanatory UI now.
+                          showGeneralDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            barrierLabel: 'Location permissions are denied',
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              return const Center(
+                                child: Text(
+                                  'Location permissions are denied',
+                                )
+                              );
+                            }
+                          );
+                        }
+                      }
+
+                      if (permission == LocationPermission.deniedForever) {
+                        // Permissions are denied forever, handle appropriately.
+                        showGeneralDialog(
+                          context: context,
+                          barrierDismissible: true,
+              
+                          barrierLabel: 'Location permissions are permanently denied, we cannot request permissions.',
+                          pageBuilder: (context, animation, secondaryAnimation) {
+                            return AlertDialog(
+                              title: Text('Aviso!'),
+                              content: Text(
+                                'Se necesitan permisos de ubicación para continuar. Ve a ajustes y habilita los permisos de ubicación'
+                              ),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Ok'))
+                              ]
+                            );
+                              
+                          }
+                        );
+                      }
+
+                      //myLocation = ref.read(userCurrentLocationProvider);
+                      //await widget.setLocation(myLocation);
+                      // When we reach here, permissions are granted and we can
+                      // continue accessing the position of the device.
+                      const LocationSettings locationSettings = LocationSettings(
+                        accuracy: LocationAccuracy.high,
+                        //distanceFilter: 100,
+                      );
+
                       await widget.getPolyline(widget.marker).then((value) {
-                        setState(() {});
                         Navigator.of(context).pop();
                       });
+                      setState(() {});
                     },
                     child: CustomDialogButton(
                       name: 'Cómo llegar',
