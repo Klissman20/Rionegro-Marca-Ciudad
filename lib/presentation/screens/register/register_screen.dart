@@ -8,9 +8,9 @@ import 'package:rionegro_marca_ciudad/presentation/widgets/login/text_field_box.
 
 import '../screens.dart';
 
-String inputName = '';
+//String inputName = '';
 String inputEmail = '';
-int inputPhone = 0;
+//int inputPhone = 0;
 String inputPassword = '';
 
 String? errorTextName(String text) {
@@ -67,7 +67,7 @@ class _RegisterView extends ConsumerStatefulWidget {
 }
 
 class _RegisterViewState extends ConsumerState<_RegisterView> {
-  TextEditingController controllerName = TextEditingController();
+  //TextEditingController controllerName = TextEditingController();
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerPhone = TextEditingController();
   /*TextEditingController controllerPhone = TextEditingController();
@@ -77,7 +77,7 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    controllerName.dispose();
+    //controllerName.dispose();
     controllerEmail.dispose();
     controllerPassword.dispose();
     controllerPhone.dispose();
@@ -89,7 +89,7 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
 
   @override
   void initState() {
-    inputName = controllerName.text;
+    //inputName = controllerName.text;
     inputEmail = controllerEmail.text;
     inputPassword = controllerPassword.text;
     super.initState();
@@ -125,7 +125,7 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 10),
             child: Column(children: [
-              CustomTextField(
+              /*CustomTextField(
                 errorText: errorTextName(controllerName.value.text),
                 typeText: TextInputType.name,
                 prefixIcon: Icons.person_3_outlined,
@@ -139,7 +139,7 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
               ),
               const SizedBox(
                 height: 20,
-              ),
+              ),*/
               CustomTextField(
                 errorText: errorTextEmail(controllerEmail.value.text),
                 typeText: TextInputType.emailAddress,
@@ -155,23 +155,23 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField(
-                errorText: errorTextPhone(controllerPhone.value.text),
-                typeText: TextInputType.phone,
-                prefixIcon: Icons.phone_enabled_outlined,
-                controller: controllerPhone,
-                labelText: 'Phone',
-                onChanged: () {
-                  setState(() {
-                    inputPhone = controllerPhone.text.isNotEmpty
-                        ? int.parse(controllerPhone.text)
-                        : 0;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              //CustomTextField(
+              //  errorText: errorTextPhone(controllerPhone.value.text),
+              //  typeText: TextInputType.phone,
+               // prefixIcon: Icons.phone_enabled_outlined,
+              //  controller: controllerPhone,
+              //  labelText: 'Phone',
+              //  onChanged: () {
+              //    setState(() {
+              //      inputPhone = controllerPhone.text.isNotEmpty
+              //          ? int.parse(controllerPhone.text)
+              //          : 0;
+              //    });
+              //  },
+              //),
+              //const SizedBox(
+              //  height: 20,
+              //),
               PasswordFieldBox(
                 errorText: errorTextPassword(controllerPassword.value.text),
                 controller: controllerPassword,
@@ -186,8 +186,8 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
               ),
               _RegisterButton(
                 textStyleBtn: textStyleBtn,
-                name: inputName,
-                phone: inputPhone,
+                //name: inputName,
+                //phone: inputPhone,
                 password: inputPassword,
                 email: inputEmail,
               ),
@@ -204,18 +204,18 @@ class _RegisterViewState extends ConsumerState<_RegisterView> {
 
 class _RegisterButton extends ConsumerWidget {
   final String? id;
-  final String name;
+  //final String name;
   final String email;
-  final int phone;
+  //final int phone;
   final String password;
 
   _RegisterButton({
     required this.textStyleBtn,
     this.id,
-    required this.name,
+    //required this.name,
     required this.password,
     required this.email,
-    required this.phone,
+    //required this.phone,
   });
 
   final TextStyle textStyleBtn;

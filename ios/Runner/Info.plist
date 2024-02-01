@@ -43,17 +43,19 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Needed to access location when the app is open in order to use Google Maps</string>
+	<string>TurismoRionegro needs to use location in order to use maps and helps to get directions for places</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Needed to access location always in order to use Google Maps</string>
+	<string>TurismoRionegro needs to use location in order to use maps and helps to get directions for places</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Needed to access location when the app is open in order to use Google Maps</string>
+	<string>TurismoRionegro needs to use location in order to use maps and helps to get directions for places</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
