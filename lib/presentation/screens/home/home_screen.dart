@@ -8,13 +8,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rionegro_marca_ciudad/config/theme/app_theme.dart';
 import 'package:rionegro_marca_ciudad/infrastructure/models/device_model.dart';
 import 'package:rionegro_marca_ciudad/presentation/providers/auth_repository_provider.dart';
-
 import 'package:rionegro_marca_ciudad/presentation/screens/screens.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -73,6 +72,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     } else {
       // Location permission is not granted, request it
       await Permission.location.request();
+
+      // Check again if permission is granted
+      if (await Permission.location.isGranted) {
+        initBeaconMonitoring();
+      }
     }
   }
 
@@ -102,6 +106,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           _showNotification(
               "Prominent disclosure message is shown to the user!");
         }
+      });
+    } else if (Platform.isIOS) {
+      await BeaconsPlugin.startMonitoring();
+      setState(() {
+        isRunning = true;
       });
     }
     // if (Platform.isIOS) {
@@ -253,16 +262,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     String descriptionText =
         'Rionegro te ofrece la oportunidad de explorar su rica historia, disfrutar de su belleza natural, degustar la gastronomía local y conectarte con el mundo.';
-    
-    _launchURLContact() async {
-    const url = 'https://ciudadrionegro.co/contacto';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
+
+    launchURLContact() async {
+      const url = 'https://ciudadrionegro.co/contacto';
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        throw 'Could not launch $url';
+      }
     }
-  
-  }
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -275,32 +283,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           IconButton(
             onPressed: () async {
               showGeneralDialog(
-                          context: context,
-                          barrierDismissible: true,
-              
-                          barrierLabel: 'Location permissions are permanently denied, we cannot request permissions.',
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return AlertDialog(
-                              title: const Text('Aviso!'),
-                              content: const Text(
-                                'Estas a punto de cerrar de sesion. ¿Estas seguro?'
-                              ),
-                              actions: [
-                                TextButton(onPressed: () async{
-                                  await ref.read(authRepositoryProvider).signOut();
-                                  context.goNamed(LoginScreen.name);
-                                  } , child: const Text('Cerrar Sesion')),
-                                TextButton(onPressed: () async{
-                                  await ref.read(authRepositoryProvider).signOut();
-                                  _launchURLContact();
-                                  context.goNamed(LoginScreen.name);
-                                  
-                                  } , child: const Text('Cerrar Sesion y solicitar borrar datos')),
-                              ]
-                            );
-                              
-                          }
-                        );
+                  context: context,
+                  barrierDismissible: true,
+                  barrierLabel:
+                      'Location permissions are permanently denied, we cannot request permissions.',
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return AlertDialog(
+                        title: const Text('Aviso!'),
+                        content: const Text(
+                            'Estas a punto de cerrar de sesion. ¿Estas seguro?'),
+                        actions: [
+                          TextButton(
+                              onPressed: () async {
+                                await ref
+                                    .read(authRepositoryProvider)
+                                    .signOut();
+                                context.goNamed(LoginScreen.name);
+                              },
+                              child: const Text('Cerrar Sesion')),
+                          TextButton(
+                              onPressed: () async {
+                                await ref
+                                    .read(authRepositoryProvider)
+                                    .signOut();
+                                launchURLContact();
+                                context.goNamed(LoginScreen.name);
+                              },
+                              child: const Text(
+                                  'Cerrar Sesion y solicitar borrar datos')),
+                        ]);
+                  });
             },
             icon: const Icon(Icons.exit_to_app),
             color: Colors.white,
@@ -432,8 +444,8 @@ class _CustomButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(color),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              backgroundColor: WidgetStatePropertyAll<Color>(color),
+              shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                       side: const BorderSide(color: Colors.transparent)))),
