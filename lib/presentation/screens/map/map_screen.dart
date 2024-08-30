@@ -287,13 +287,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     PointLatLng destination =
         PointLatLng(marker.position.latitude, marker.position.longitude);
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleApiKey: googleAPiKey,
-      request: PolylineRequest(
-        origin: myLocation,
-        destination: destination,
-        mode: TravelMode.driving,
-      ),
-    );
+        googleAPiKey, myLocation, destination,
+        travelMode:
+            myLocationDistance < 5.0 ? TravelMode.walking : TravelMode.driving);
     clearPolylines();
     double minLat = 0;
     double minLong = 0;
@@ -387,9 +383,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
   }
 
+
   _launchWhatsapp(String phone, String? msg) async {
-    var url =
-        "https://wa.me/$phone?text=${Uri.parse(msg ?? 'Hola, necesito mas informaciòn')}";
+    var url = "https://wa.me/$phone?text=${Uri.parse(msg ?? 'Hola, necesito mas informaciòn')}";
 
     try {
       if (await canLaunchUrl(Uri.parse(url))) {
@@ -417,6 +413,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           myLocation = PointLatLng(data.latitude, data.longitude);
           setState(() {});
         }
+        
       },
       error: (error, stackTrace) {
         debugPrint("$error");
@@ -457,35 +454,30 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       showGeneralDialog(
                           context: context,
                           barrierDismissible: true,
-                          barrierLabel:
-                              'Location permissions are permanently denied, we cannot request permissions.',
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
+              
+                          barrierLabel: 'Location permissions are permanently denied, we cannot request permissions.',
+                          pageBuilder: (context, animation, secondaryAnimation) {
                             return AlertDialog(
-                                title: const Text('Aviso!'),
-                                content: const Text(
-                                    'Estas a punto de cerrar de sesion. ¿Estas seguro?'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () async {
-                                        await ref
-                                            .read(authRepositoryProvider)
-                                            .signOut();
-                                        context.goNamed(LoginScreen.name);
-                                      },
-                                      child: const Text('Cerrar Sesion')),
-                                  TextButton(
-                                      onPressed: () async {
-                                        await ref
-                                            .read(authRepositoryProvider)
-                                            .signOut();
-                                        _launchURLContact();
-                                        context.goNamed(LoginScreen.name);
-                                      },
-                                      child: const Text(
-                                          'Cerrar Sesion y solicitar borrar datos')),
-                                ]);
-                          });
+                              title: const Text('Aviso!'),
+                              content: const Text(
+                                'Estas a punto de cerrar de sesion. ¿Estas seguro?'
+                              ),
+                              actions: [
+                                TextButton(onPressed: () async{
+                                  await ref.read(authRepositoryProvider).signOut();
+                                  context.goNamed(LoginScreen.name);
+                                  } , child: const Text('Cerrar Sesion')),
+                                TextButton(onPressed: () async{
+                                  await ref.read(authRepositoryProvider).signOut();
+                                  _launchURLContact();
+                                  context.goNamed(LoginScreen.name);
+                                  
+                                  } , child: const Text('Cerrar Sesion y solicitar borrar datos')),
+                              ]
+                            );
+                              
+                          }
+                        );
                     },
                     icon: const Icon(Icons.exit_to_app_rounded,
                         color: Colors.white))
