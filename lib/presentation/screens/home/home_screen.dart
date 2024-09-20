@@ -49,11 +49,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
-    // final DarwinInitializationSettings initializationSettingsDarwin =
-    //     DarwinInitializationSettings(
-    //         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    final initializationSettingsDarwin = DarwinInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: null);
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsDarwin);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
@@ -104,22 +104,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           });
         } else if (call.method == 'isPermissionDialogShown') {
           _showNotification(
-              "Prominent disclosure message is shown to the user!");
+              "Debes aceptar los permisos para una mejor experiencia");
         }
       });
     } else if (Platform.isIOS) {
+      _showNotification("Beacons monitoring started..");
       await BeaconsPlugin.startMonitoring();
       setState(() {
         isRunning = true;
       });
     }
-    // if (Platform.isIOS) {
-    //   _showNotification("Beacons monitoring started..");
-    //   await BeaconsPlugin.startMonitoring();
-    //   setState(() {
-    //     isRunning = true;
-    //   });
-    // }
 
     BeaconsPlugin.listenToBeacons(beaconEventsController);
 
@@ -150,36 +144,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
             if (!_isInForeground) {
               if (mdata.macAddress == "CA:0E:FD:72:2C:4A") {
-                if (mdata.distance < 5) {
+                if (mdata.distance < 20) {
                   _showNotification(
                       "Bienvenido. Se encuentra en una zona de turismo inteligente. para conocer mas da clic aquí");
                 }
               }
               if (mdata.macAddress == "E2:EE:94:93:32:7F") {
-                if (mdata.distance < 5) {
+                if (mdata.distance < 20) {
                   _showNotification(
                       "Bienvenido. Se encuentra en una zona de turismo inteligente. para conocer mas da clic aquí");
                 }
               }
               if (mdata.macAddress == "FF:1D:37:71:42:E3") {
-                if (mdata.distance < 5) {
+                if (mdata.distance < 20) {
+                  _showNotification(
+                      "Bienvenido. Se encuentra en una zona de turismo inteligente. para conocer mas da clic aquí");
+                }
+              }
+              if (mdata.macAddress == "D7:7F:24:4E:C7:D2") {
+                if (mdata.distance < 20) {
+                  _showNotification(
+                      "Bienvenido. Se encuentra en una zona de turismo inteligente. para conocer mas da clic aquí");
+                }
+              }
+              if (mdata.macAddress == "C7:DC:56:32:8A:7E") {
+                if (mdata.distance < 20) {
+                  _showNotification(
+                      "Bienvenido. Se encuentra en una zona de turismo inteligente. para conocer mas da clic aquí");
+                }
+              }
+              if (Platform.isIOS) {
+                if (mdata.uuid == 'B9407F30-F5F8-466E-AFF9-25556B57FE6D') {
                   _showNotification(
                       "Bienvenido. Se encuentra en una zona de turismo inteligente. para conocer mas da clic aquí");
                 }
               }
               return;
             }
-
-            // if (mdata.macAddress == "CA:0E:FD:72:2C:4A") {
-            //   if (mdata.distance < 5) {
-            //     _showNotification("beacon1 esta cerca");
-            //   }
-            // }
-            // if (mdata.macAddress == "E2:EE:94:93:32:7F") {
-            //   if (mdata.distance < 5) {
-            //     _showNotification("beacon2 esta cerca");
-            //   }
-            // }
 
             print("Beacons DataReceived: " + data);
           }
@@ -209,9 +210,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           importance: Importance.high,
           priority: Priority.high,
           ticker: 'ticker');
+      const iOSPlatformChannelSpecifics = DarwinNotificationDetails(
+          presentAlert: true, presentBadge: true, presentSound: true);
       var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-      );
+          android: androidPlatformChannelSpecifics,
+          iOS: iOSPlatformChannelSpecifics);
       await flutterLocalNotificationsPlugin.show(
           rng.nextInt(100000), _tag, subtitle, platformChannelSpecifics,
           payload: 'item x');
